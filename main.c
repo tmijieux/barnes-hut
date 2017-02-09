@@ -81,10 +81,8 @@ static void compute_barnes_hut_force(
     printf("COMPUTE barnes-hut forces >>\n");
 
     #pragma omp parallel for
-    for (int64_t i = 0; i < nb_particles; ++i) {
-        tdp_particle *p = tree_leaves+i;
-        tdp_site_compute_bh_force(site, p);
-    }
+    for (int64_t i = 0; i < nb_particles; ++i)
+        tdp_site_compute_bh_force(site, tree_leaves+i);
     puts("<<END");
 }
 
@@ -95,7 +93,7 @@ static void compute_exact_force(tdp_particle *particles, int64_t particle_count)
 {
     puts("COMPUTE exact forces>>");
 
-    #pragma omp parallel for
+    #pragma omp parallel for collapse(2)
     for (int64_t i = 0; i < particle_count; ++i) {
         for (int64_t j = 0; j < particle_count; ++j) {
             if (j != i)
@@ -107,7 +105,7 @@ static void compute_exact_force(tdp_particle *particles, int64_t particle_count)
 
 static void barnes_hut(const int64_t N)
 {
-    tdp_site *tree = tdp_site_new(NULL, 0.0, 0.0, 200.0, 200.0);
+    tdp_site *tree = tdp_site_new(0.0, 0.0, 200.0, 200.0);
     tdp_particle *tree_leaves;
 
     TIME( tree_leaves = tdp_site_tree_gen(tree, N), "tree_gen" ) ; // génération de l'arbre

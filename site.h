@@ -16,21 +16,17 @@ struct tdp_site_ {
 
     double min_x, min_y, max_x, max_y;
     double x_width, y_height;
-
     tdp_particle mass_center;
 
-    tdp_site *parent;
     tdp_site *up_left;
     tdp_site *up_right;
     tdp_site *down_left;
     tdp_site *down_right;
 };
 
-void tdp_site_init(tdp_site *site, tdp_site *parent,
+void tdp_site_init(tdp_site *site,
                    double min_x, double min_y, double max_x, double max_y);
-tdp_site *tdp_site_new(tdp_site *parent,
-                       double min_x, double min_y, double max_x, double max_y);
-void tdp_site_subdivide(tdp_site *site);
+tdp_site *tdp_site_new(double min_x, double min_y, double max_x, double max_y);
 void tdp_site_insert_particle(tdp_site *tree, tdp_particle *p);
 tdp_particle *tdp_site_tree_gen(tdp_site *tree, int64_t particles_count);
 

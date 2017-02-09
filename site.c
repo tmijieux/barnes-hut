@@ -8,7 +8,6 @@
 #include "util.h"
 
 void tdp_site_init(tdp_site *site,
-                   tdp_site *parent,
                    double min_x, double min_y,
                    double max_x, double max_y)
 {
@@ -17,7 +16,6 @@ void tdp_site_init(tdp_site *site,
     site->is_empty = true;
     site->is_leaf = true;
     site->particle = NULL;
-    site->parent = parent;
 
     site->min_x = min(min_x, max_x);
     site->min_y = min(min_y, max_y);
@@ -28,37 +26,32 @@ void tdp_site_init(tdp_site *site,
     site->y_height = site->max_y - site->min_y;
 }
 
-tdp_site *tdp_site_new(tdp_site *parent,
-                       double min_x, double min_y,
+tdp_site *tdp_site_new(double min_x, double min_y,
 		       double max_x, double max_y)
 {
     tdp_site *site = malloc(sizeof*site);
-    tdp_site_init(site, parent, min_x, min_y, max_x, max_y);
+    tdp_site_init(site, min_x, min_y, max_x, max_y);
     return site;
 }
 
-void tdp_site_subdivide(tdp_site *site)
+static void subdivide_site(tdp_site *site)
 {
-    site->up_left = tdp_site_new(site,
-                                 site->min_x,
+    site->up_left = tdp_site_new(site->min_x,
                                  site->min_y + (site->y_height/2.0),
                                  site->min_x + (site->x_width/2.0),
                                  site->max_y);
 
-    site->up_right = tdp_site_new(site,
-                                  site->min_x + (site->x_width/2.0),
+    site->up_right = tdp_site_new(site->min_x + (site->x_width/2.0),
                                   site->min_y + (site->y_height/2.0),
                                   site->max_x,
                                   site->max_y);
 
-    site->down_left = tdp_site_new(site,
-                                   site->min_x,
+    site->down_left = tdp_site_new(site->min_x,
                                    site->min_y,
                                    site->min_x + (site->x_width/2.0),
                                    site->min_y + (site->y_height/2.0));
 
-    site->down_right = tdp_site_new(site,
-                                    site->min_x + (site->x_width/2.0),
+    site->down_right = tdp_site_new(site->min_x + (site->x_width/2.0),
                                     site->min_y,
                                     site->max_x,
                                     site->min_y + (site->y_height/2.0));
@@ -81,7 +74,7 @@ void tdp_site_insert_particle(tdp_site *tree, tdp_particle *p)
             tree->is_empty = false;
             tree->particle = NULL;
 
-            tdp_site_subdivide(tree);
+            subdivide_site(tree);
 
             tdp_site_insert_particle(tree, p);
             tdp_site_insert_particle(tree, b);
@@ -121,8 +114,7 @@ void tdp_site_update_center(tdp_site *tree, tdp_particle *p)
 tdp_particle *tdp_site_tree_gen(tdp_site *site, int64_t particles_count)
 {
     tdp_particle *buf = malloc(sizeof*buf * particles_count);
-    for (int64_t i = 0; i < particles_count; ++i)
-    {
+    for (int64_t i = 0; i < particles_count; ++i) {
         tdp_particle_init_random(
             buf+i, site->min_x, site->min_y, site->max_x, site->max_y);
         tdp_site_insert_particle(site, buf+i);
@@ -132,7 +124,7 @@ tdp_particle *tdp_site_tree_gen(tdp_site *site, int64_t particles_count)
 
 void tdp_site_compute_bh_force(tdp_site *site, tdp_particle *p)
 {
-    double width = site->x_width;
+    double width = max(site->x_width, site->y_height);
     assert(width > 0);
 
     if (site->is_leaf) {

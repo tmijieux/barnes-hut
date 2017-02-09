@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "perf.h"
-#include "cblas.h"
 
 
 int main(){
@@ -27,6 +26,7 @@ int main(){
   perf_diff(&start, &stop);
   performance = perf_mflops(&stop, flop);
   printf("Mflop/s : %lf \n", performance);
+  printf("time: %ld\n", perf_get_micro(&stop));
 
   return 0;
 }
