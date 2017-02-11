@@ -124,16 +124,15 @@ tdp_particle *tdp_site_tree_gen(tdp_site *site, int64_t particles_count)
 
 void tdp_site_compute_bh_force(tdp_site *site, tdp_particle *p)
 {
-    double width = max(site->x_width, site->y_height);
-    assert(width > 0);
-
     if (site->is_leaf) {
-        if (site->particle == p || site->is_empty)
+        if (site->is_empty || site->particle == p)
             return;
         COMPUTE_FORCE(site->particle, p);
     } else {
-        double distance;
+        double distance, width;
+        width = max(site->x_width, site->y_height);
         distance = hypot(p->x-site->mass_center.x, p->y-site->mass_center.y);
+        
         if ((width / distance) < THRESHOLD)   // Under threshold: approximation
             COMPUTE_FORCE(&site->mass_center, p);
         else {

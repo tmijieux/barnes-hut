@@ -6,7 +6,7 @@
 #include <assert.h>
 #include <time.h>
 
-#include "perf/perf.h"
+#include "../perf/perf.h"
 #include "site.h"
 #include "util.h"
 

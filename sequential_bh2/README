@@ -1,0 +1,3 @@
+-Pour compiler, utilisez le makefile
+-Pour executer:
+./particle nb_particule

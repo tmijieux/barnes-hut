@@ -12,7 +12,7 @@ CFLAGS+=-O3
 endif
 
 SRC=	main.c \
-	perf/perf.c \
+	../perf/perf.c \
 	site.c \
 	particle.c
 
