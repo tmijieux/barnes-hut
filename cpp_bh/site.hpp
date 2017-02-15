@@ -27,7 +27,7 @@ class site {
     site_ptr _down_left;
     site_ptr _down_right;
     void subdivide_site();
-    
+
 public:
     site(double min_x, double min_y, double max_x, double max_y);
     void insert_particle(particle *p);

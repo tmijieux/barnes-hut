@@ -64,11 +64,11 @@ static void compute_difference(
         << "erreur maximale: " << err_max*100 << "%" << endl
         << "erreur moyenne: " << total_err*100 << "%" << endl
         << "erreur moyenne pondéré: " << total_N_err*100 <<"%"<< endl
-        
+
         << "1er quartile: " << errors[(int)((double)p_count/4.)]*100 << "%" << endl
         << "erreur médiane: " << errors[(int)((double)p_count/2.)]*100 <<"%" << endl
         << "3ème quartile: " << errors[(int)(3.*p_count/4.)]*100 << "%" << endl
-        
+
         << N - p_count << " erreur de calcul" << endl
         << nan_count << " nan values" << endl
         << inf_count << " inf values" << endl << endl << endl;
@@ -79,7 +79,7 @@ compute_barnes_hut_force(site_ptr site, particle_vec &v)
 {
     std::cout<< "COMPUTE barnes-hut forces >>" << std::endl;
     const uint64_t N = v.size();
-    
+
     #pragma omp parallel for
     for (uint64_t i = 0; i < N; ++i)
         site->compute_bh_force(&v[i]);
@@ -93,7 +93,7 @@ static void compute_exact_force(particle_vec &v)
 {
     puts("COMPUTE exact forces>>");
     const uint64_t N = v.size();
-    
+
     #pragma omp parallel for
     for (uint64_t i = 0; i < N; ++i) {
         for (uint64_t j = 0; j < N; ++j) {
@@ -125,7 +125,7 @@ int main(int argc, char *argv[])
 {
     // barnes_hut::proc p;
     // p.print();
-    
+
     srand(time(NULL)+(long)&argc);
     int64_t N = 20000;
 

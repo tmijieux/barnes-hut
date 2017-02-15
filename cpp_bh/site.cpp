@@ -62,7 +62,7 @@ void site::insert_particle(particle *p)
 
             particle *b = _particle;
             assert( b != NULL );
-            
+
             _is_leaf = false;
             _is_empty = false;
             _particle = NULL;
@@ -105,12 +105,12 @@ particle_vec site::tree_gen(int64_t particles_count)
 {
     particle_vec v;
     v.reserve(particles_count);
-    
+
     for (int64_t i = 0; i < particles_count; ++i)
-        v.emplace_back( _min_x, _min_y, _max_x, _max_y);
+        v.emplace_back( _min_x, _min_y, _max_x, _max_y, particles_count);
 
     std::sort(v.begin(), v.end());
-              
+
     for (auto &p : v)
         insert_particle(&p);
 
