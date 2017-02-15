@@ -29,12 +29,18 @@ void tdp_site_init(tdp_site *site,
 static tdp_site *tree_buf = NULL;
 static int tree_idx = 0;
 
+void print_tree_idx(void)
+{
+    printf("tree_idx: %d\n", tree_idx);
+}
+
 void tdp_tree_alloc(uint64_t N)
 {
     N = 8*sizeof N - __builtin_clzl(N);
     N = 1 << (N+1);
     printf("N=%lu\n", N);
     tree_buf = malloc(sizeof(tdp_site) * ((4*N-1)/3));
+    atexit(print_tree_idx);
 }
 
 tdp_site *tdp_site_new(double min_x, double min_y,
@@ -143,7 +149,7 @@ void tdp_site_compute_bh_force(tdp_site *site, tdp_particle *p)
         double distance, width;
         width = max(site->x_width, site->y_height);
         distance = hypot(p->x-site->mass_center.x, p->y-site->mass_center.y);
-        
+
         if ((width / distance) < THRESHOLD)   // Under threshold: approximation
             COMPUTE_FORCE(&site->mass_center, p);
         else {

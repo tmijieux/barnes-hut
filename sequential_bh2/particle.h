@@ -4,9 +4,9 @@
 typedef struct tdp_particle_ tdp_particle;
 
 struct tdp_particle_ {
-  double mass;
-  double x, y;
-  double fx, fy;
+    double mass;
+    double x, y;
+    double fx, fy;
 };
 
 void tdp_particle_init_random(

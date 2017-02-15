@@ -13,17 +13,16 @@ struct tdp_site_ {
     bool is_leaf, is_empty;
 
     tdp_particle *particle;
+    tdp_particle mass_center;
 
     double min_x, min_y, max_x, max_y;
     double x_width, y_height;
-    tdp_particle mass_center;
 
     tdp_site *up_left;
     tdp_site *up_right;
     tdp_site *down_left;
     tdp_site *down_right;
 };
-
 
 void tdp_tree_alloc(uint64_t N);
 void tdp_site_init(tdp_site *site,
@@ -38,6 +37,8 @@ void tdp_leaves_copy(tdp_particle *dest, tdp_particle *src);
 void tdp_site_free(tdp_site *tree);
 
 #define THRESHOLD (0.707)
+//#define THRESHOLD (0.05)
+
 #define GRAVITATIONAL_CONSTANT (6.67408e-11)
 #define COMPUTE_FORCE(SRC_, DST_)					\
     do {								\

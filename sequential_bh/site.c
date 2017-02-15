@@ -132,7 +132,7 @@ void tdp_site_compute_bh_force(tdp_site *site, tdp_particle *p)
         double distance, width;
         width = max(site->x_width, site->y_height);
         distance = hypot(p->x-site->mass_center.x, p->y-site->mass_center.y);
-        
+
         if ((width / distance) < THRESHOLD)   // Under threshold: approximation
             COMPUTE_FORCE(&site->mass_center, p);
         else {

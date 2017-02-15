@@ -106,7 +106,7 @@ static void compute_exact_force(tdp_particle *particles, int64_t particle_count)
 static void barnes_hut(const int64_t N)
 {
     tdp_tree_alloc(N);
-    
+
     tdp_site *tree = tdp_site_new(0.0, 0.0, 200.0, 200.0);
     tdp_particle *tree_leaves;
 
