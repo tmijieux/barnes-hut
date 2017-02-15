@@ -107,8 +107,10 @@ particle_vec site::tree_gen(int64_t particles_count)
     v.reserve(particles_count);
 
     for (int64_t i = 0; i < particles_count; ++i)
+        // uniform distribution
         v.emplace_back( _min_x, _min_y, _max_x, _max_y, particles_count);
 
+    // sort z-order (improve locality during Quad-tree walk)
     std::sort(v.begin(), v.end());
 
     for (auto &p : v)

@@ -1,6 +1,6 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
 
 #include "particle.hpp"
 
@@ -46,6 +46,7 @@ particle::particle(double min_x, double min_y,
     fx(0.0), fy(0.0),
     z(0)
 {
+    assert( (nb_particles & 0xFFFFFFFF00000000) == 0 );
     uint64_t xx = ((x-min_x) / (max_x-min_x)) * 2*nb_particles;
     uint64_t yy = ((y-min_y) / (max_y-min_y)) * 2*nb_particles;
     z = interleave(xx, yy);
@@ -61,7 +62,7 @@ particle::particle(const particle& o):
 {
 }
 
-bool particle::operator<(const particle &o)
+bool particle::operator<(const particle& o)
 {
     return z < o.z;
 }

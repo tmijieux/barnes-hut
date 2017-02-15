@@ -13,12 +13,12 @@ struct particle {
     double x, y;
     double mass;
     double fx, fy;
-    uint64_t z;
+    uint64_t z; // z-order
     particle();
     particle(const particle&);
     particle(double min_x, double min_y, double max_x, double max_y,
              int64_t nb_particles);
-    bool operator<(const particle &);
+    bool operator<(const particle&);
 };
 
 }; // end namespace barnes_hut

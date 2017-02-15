@@ -10,15 +10,15 @@
 #include "util.hpp"
 #include "proc.hpp"
 
-#define TIME( instr, msg ) ({                           \
-            perf_t p1_, p2_;                            \
-            perf(&p1_);                                 \
-            { instr; }                                  \
-            perf(&p2_);                                 \
-            perf_diff(&p1_, &p2_);                      \
-            double T_ = perf_get_seconds(&p2_);         \
-            fprintf(stderr, "time " msg " %g s\n", T_); \
-            T_;                                         \
+#define TIME( instr, msg ) ({                                           \
+            perf_t p1_, p2_;                                            \
+            perf(&p1_);                                                 \
+            { instr; }                                                  \
+            perf(&p2_);                                                 \
+            perf_diff(&p1_, &p2_);                                      \
+            double T_ = perf_get_seconds(&p2_);                         \
+            std::cout << "time " msg " "<< T_<<" s"<< std::endl;        \
+            T_;                                                         \
         })
 
 using namespace barnes_hut;
@@ -107,25 +107,22 @@ static void compute_exact_force(particle_vec &v)
 static void do_barnes_hut(const int64_t N)
 {
     site_ptr tree = site::make_shared(0.0, 0.0, 200.0, 200.0);
-    particle_vec tree_leaves, leaves_copy;
+    particle_vec leaves_bh, leaves_exact;
 
-    TIME( tree_leaves = tree->tree_gen(N), "tree_gen" ) ; // génération de l'arbre
+    TIME( leaves_bh = tree->tree_gen(N), "tree_gen" ) ; // génération de l'arbre
 
-    leaves_copy = tree_leaves;
+    leaves_exact = leaves_bh;
 
     double t1, t2;
-    t1 = TIME( compute_barnes_hut_force(tree, tree_leaves), "Barnes-Hut Forces" );
-    t2 = TIME( compute_exact_force(leaves_copy), "exact Forces" );
+    t1 = TIME( compute_barnes_hut_force(tree, leaves_bh), "Barnes-Hut Forces" );
+    t2 = TIME( compute_exact_force(leaves_exact), "exact Forces" );
     std::cout << "Barnes-Hut SPEEDUP: " << t2/t1 << std::endl;
 
-    compute_difference(tree_leaves, leaves_copy);
+    compute_difference(leaves_bh, leaves_exact);
 }
 
 int main(int argc, char *argv[])
 {
-    // barnes_hut::proc p;
-    // p.print();
-
     srand(time(NULL)+(long)&argc);
     int64_t N = 20000;
 
