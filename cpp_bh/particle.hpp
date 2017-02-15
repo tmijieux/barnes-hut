@@ -1,6 +1,7 @@
 #ifndef TDP_PARTICLE_H
 #define TDP_PARTICLE_H
 
+#include <cstdint>
 #include "util.hpp"
 
 namespace barnes_hut {
